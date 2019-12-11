@@ -55,6 +55,19 @@
 	<property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
     
+    <!-- Configure to plugin JSON as request and response in method handler -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+	    <property name="messageConverters">
+		 <ref bean="jsonMessageConverter"/>
+	    </property>
+    </bean>
+
+    <!-- Configure bean to convert JSON to POJO and vice versa -->
+    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+    </bean>	
+
+    
+	
     <tx:annotation-driven transaction-manager="transactionManager" />
     <jpa:repositories base-package="com.mycompany.dao"/>
     <context:component-scan base-package="com.mycompany" />

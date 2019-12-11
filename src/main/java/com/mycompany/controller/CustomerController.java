@@ -6,7 +6,7 @@
 package com.mycompany.controller;
 
 import com.mycompany.entity.Customer;
-import com.mycompany.service.CustomerService;
+import com.mycompany.service.CustomerServiceIF;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CustomerController {
 
     @Autowired
-    private CustomerService customerService;
+    private CustomerServiceIF customerService;
 
-    @GetMapping("/list")
+    @GetMapping(value = "/list")
     public String listCustomers(Model theModel) {
 	List< Customer> theCustomers = customerService.getCustomers();
 	theModel.addAttribute("customers", theCustomers);
