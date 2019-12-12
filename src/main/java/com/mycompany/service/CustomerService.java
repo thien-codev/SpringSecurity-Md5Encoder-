@@ -8,6 +8,7 @@ package com.mycompany.service;
 import com.mycompany.dao.CustomerDaoIF;
 import com.mycompany.entity.Customer;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,8 @@ public class CustomerService implements CustomerServiceIF{
 
     @Override
     public Customer getCustomer(int theId) {
-	return customerDaoIF.findById(theId).get();
+	Optional<Customer> customerOpt = customerDaoIF.findById(theId);
+	return customerOpt.isPresent() ? customerOpt.get() : null;
     }
 
     @Override
