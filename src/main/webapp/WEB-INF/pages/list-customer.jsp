@@ -5,7 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="tg" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,6 +22,25 @@
 	<div class="container">
 	    <div class="col-md-offset-1 col-md-10">
 		<h2>CRM - Customer Relationship Manager</h2>
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <!-- For login user -->
+                    <form action="<c:url value='/j_spring_security_logout' />" method="post" id="logoutForm">
+                            <input type="hidden" name="${_csrf.parameterName}"
+                                    value="${_csrf.token}" />
+                    </form>
+                    <script>
+                            function formSubmit() {
+                                    document.getElementById("logoutForm").submit();
+                            }
+                    </script>
+
+                    <c:if test="${pageContext.request.userPrincipal.name != null}">
+                            <h2>
+                                    User : ${pageContext.request.userPrincipal.name} | <a
+                                            href="javascript:formSubmit()"> Logout</a>
+                            </h2>
+                    </c:if>
+                </sec:authorize>
 		<hr />
 
 		<input type="button" value="Add Customer"
@@ -40,7 +61,7 @@
 			    </tr>
 
 			    <!-- loop over and print our customers -->
-			    <c:forEach var="tempCustomer" items="${customers}">
+			    <c:forEach var="tempCustomer" items="${pagedListHolder.pageList}">
 
 				<!-- construct an "update" link with customer id -->
 				<c:url var="updateLink" value="/customer/updateForm">
@@ -66,6 +87,11 @@
 				</tr>
 			    </c:forEach>
 			</table>
+                        <c:url value="/list" var="pagedLink">
+                                <c:param name="p" value="~" />
+                        </c:url>
+                        <tg:paging pagedListHolder="${pagedListHolder}"
+			pagedLink="${pagedLink}" />
 		    </div>
 		</div>
 	    </div>

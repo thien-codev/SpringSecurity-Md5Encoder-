@@ -8,6 +8,7 @@ package com.mycompany.controller;
 import com.mycompany.entity.Customer;
 import com.mycompany.service.CustomerServiceIF;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.web.bind.ServletRequestUtils;
 
 /**
  *
@@ -29,9 +32,14 @@ public class CustomerController {
     private CustomerServiceIF customerService;
 
     @GetMapping(value = "/list")
-    public String listCustomers(Model theModel) {
-	List< Customer> theCustomers = customerService.getCustomers();
-	theModel.addAttribute("customers", theCustomers);
+    public String listCustomers(HttpServletRequest request, Model theModel) {
+	List< Customer> customers = customerService.getCustomers();
+        PagedListHolder pagedListHolder = new PagedListHolder(customers);
+		int page = ServletRequestUtils.getIntParameter(request, "p", 0);
+		pagedListHolder.setPage(page);
+		pagedListHolder.setPageSize(5);
+		theModel.addAttribute("pagedListHolder", pagedListHolder);
+                
 	return "list-customer";
     }
 
