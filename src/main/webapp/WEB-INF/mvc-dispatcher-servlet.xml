@@ -59,11 +59,8 @@
     
     <tx:annotation-driven transaction-manager="transactionManager" />
     <jpa:repositories base-package="com.mycompany.dao"/>
-    <context:component-scan base-package="com.mycompany" />
+    <context:component-scan base-package="com.mycompany.*" />
     
     <mvc:resources mapping="/resources/**" location="/resources/" />
     <mvc:annotation-driven />
-    <!--
-    <import resource="spring-security.xml"/>
-    -->
 </beans>
